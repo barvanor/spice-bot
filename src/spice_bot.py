@@ -129,7 +129,7 @@ class SpiceBot(commands.Bot):
         player = self.players.get(ctx.author, None)
         if not player:
             roll = self.roll_dice()
-            await ctx.reply(self.format_message('non_partivipant_roll', ctx.author, roll=roll))
+            await ctx.reply(self.format_message('non_participant_roll', ctx.author, roll=roll))
             return
         if not type:
             roll_msg = await self.send_message(ctx, 'roll_prompt', player)

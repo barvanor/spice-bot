@@ -34,7 +34,7 @@ Dependencies are:
 Commands below use a forward-slash as command prefix, but this can be changed in
 the configuration.
 
-+ ~/newgame~~
++ ~/newgame~
 
 Create a new game. Display a message and wait for people to join by reacting to it.
 The member who invokes this command will be game master.
