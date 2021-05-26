@@ -1,0 +1,98 @@
+#+TITLE: Readme
+
+A Discord bot to manage All Outta Spice games.
+
+* Installing and running
+To use this bot, simply download the repository, install dependencies in a
+virtual environment, and provide a ~.env~ file with a ~DISCORD_TOKEN~ variable that
+contains your bot token.
+
+#+begin_src sh
+# download and open the repo
+git clone <url>
+cd spice-bot
+
+# Create a virtual environment and install dependencies
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+
+# Add your bot token to a .env file
+echo 'DISCORD_TOKEN=<YOUR BOT TOKEN>' > .env
+
+# Run
+cd src
+python main.py
+#+end_src
+
+Dependencies are:
++ discord.py
++ ruamel.yaml
++ python-dotenv
+
+* Commands
+Commands below use a forward-slash as command prefix, but this can be changed in
+the configuration.
+
+** /newgame
+Create a new game. Display a message and wait for people to join by reacting to it.
+The member who invokes this command will be game master.
+
+** /startgame
+End the join phase and announce the turn order before starting the game. The
+turn order is randomly generated.
+
+** /roll [type]
+Roll a die. ~type~ can be either "mild" or "spicy". If type is not provided,
+prompt for type via reactions.
+
+The result is compared to the players current remaining ~spice~ and appropriate
+action is taken according to the rules of the game.
+
+** /stats
+Display stats about the current game. This will output turn order, current turn as well as scoreboard.
+
+
+* Configuration
+The bot can be configured via ~config.yaml~
+
+The configuration variables are
+
++ ~command_prefix~
+  Sets the character that indicates that a message should be interpreted as a command.
+
+  Default is '/'
+
++ ~initial_spice~
+  The amount of *spice* that each player starts with.
+
+  Default is 8
+
++ ~dice_type~
+  Number of faces on a die.
+
+  Default is 10
+
++ ~reaction_timeout~
+  Number of seconds to wait for a reaction. This only applies to simple yes/no
+  type prompts that awaits response from a single player. The "join game"
+  reaction will never time out untill the ~/startgame~ command is used.
+  A value of 0 disables timeout.
+
+  Default is 0
+
++ ~messages~
+  Contains an option for each message that the bot can send.
+
+  They accept placeholders that will be replaced with relevant data depending on
+  the context. These are documented within the default ~config.yaml~.
+
+  They are python style format strings, so placeholders can use padding and
+  other formatting options.
+
+* TODO
++ Implement logging.
++ Properly enforce turn order.
++ Add options to ~/newgame~ change settings per game.
++ Contain game logic from the main bot so that it can host multiple games
+  accross different channels or servers.

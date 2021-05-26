@@ -1,0 +1,91 @@
+command_prefix: '/' #Character to use with commands
+initial_spice: 8    #The amount of spice that each player starts with
+dice_type: 10       #How many faces a die has
+reaction_timeout: 0 #How long to wait for players to react to prompts. If 0, never timeout.
+
+messages:
+  # Messages to be send when certain events occur.
+  #
+  # To add a newline either use \n or a blank line.
+  #
+  # Since messages are enclosed in double-quotes, in order to use a literal
+  # double-quote it must be escaped with a blackslash \"like this\"
+  #
+  # Messages can have wildcards in the form {WILDCARD}
+  # Wildcards will be substituted based on context.
+  # For example '{name} rolled a {roll}' might become 'Jay rolled a 5'
+  #
+  # Common Wildcards:
+  # {name}    - The member who invoked the command, or gets affected by the associated event.
+  # {mention} - Same as {name} but as a @mention.
+  # {players} - A comma-separated list of participants, ordered by turn.
+  # {roll}    - The result of a dice roll.
+  # {spice}   - Amount of spice the player has.
+
+  # When a new game is created with /newgame
+  # Available wildcards: {name}, {mention}
+  new_game: "{name} started a new game and will be the game master.
+  \nReact with :hot_pepper: to participate"
+
+  # Send when when a new game is started with /startgame
+  # Available wildcards: {name}, {mention}, {players}
+  start_game: "The game is starting now.
+  \nThe turn order is:
+  \n{players}"
+
+  # When /roll is invoked without specifying spiciness. prompt to specify via reaction.
+  # Available wildcards: {name}, {mention}
+  roll_prompt: "Do you want to make a :hot_pepper:spicy or a :bell_pepper:mild roll?"
+
+  # After any roll when the value is announced (before result is announced)
+  # Available wildcards: {name}, {mention}, {roll}
+  roll_result: "{name} rolled a :game_die:{roll}"
+
+  # On a successful mild roll
+  # Available wildcards: {name}, {mention}, {roll}, {spice}
+  mild_roll_success: "{name}'s mild roll was successful."
+
+  # On a failed mild roll
+  # Available wildcards: {name}, {mention}, {roll}, {spice}
+  mild_roll_fail: "{name}'s mild roll was failed and they lost 1:hot_pepper:
+  \nRemaining: {spice}:hot_pepper:"
+
+  # On a successful spicy roll
+  # Available wildcards: {name}, {mention}, {roll}, {spice}
+  spicy_roll_success: "{name}'s spicy roll was successful."
+
+  # On a successful spicy roll
+  # Available wildcards: {name}, {mention}, {roll}, {spice}
+  spicy_roll_fail: "{mention}, your spicy roll failed.
+  \nPay the spice price of 1:hot_pepper: to succeed?"
+
+  # When a player chose to pay the spice price after a failed spicy roll.
+  # Available wildcards: {name}, {mention}, {roll}, {spice}
+  spice_price_accept: "Paid 1:hot_pepper: and succeeded the roll.
+  \nRemaining: {spice}:hot_pepper:"
+
+  # When a player declines the spice price after a failed spicy roll.
+  # Available wildcards: {name}, {mention}, {roll}, {spice}
+  spice_price_decline: "what happens here?"
+
+  # When a player who hasn't joined the current game tries to roll. Makes a dummy roll.
+  # Available wildcards: {name}, {mention}, {roll}
+  non_participant_roll: "You're not even participating, but sure...
+  \nYou rolled a :game_die:{roll}."
+
+  # Output of the /stats command.
+  # Available wildcards: {players},
+  # {current}    - the player who has the current turn
+  # {scoreboard} - formatted scoreboard (see below)
+  get_stats: "The turn order is:
+    \n{players}
+    \nAnd it is currently {current}'s turn.
+    \n```
+    \n#  Name         Spice
+    \n---------------------
+    \n{scoreboard}
+    \n```"
+
+  # When printing the scoreboard, display each player using this format
+  # Available wildcards: {name}, {mention}, {spice}, {placing}
+  player_stat: "{placing}. {name:<15} {spice}"
