@@ -115,12 +115,12 @@ class SpiceBot(commands.Bot):
     async def mild_roll(self, ctx:commands.Context, player:SpicePlayer):
         roll = self.roll_dice()
         await ctx.send(self.format_message('roll_result', player.user, roll=roll))
-        msg = ''
+        resp = ''
         if roll <= player.spice:
-            msg = 'mild_roll_success'
+            resp = 'mild_roll_success'
         else:
             player.spice -= 1
-            msg = 'mild_roll_fail'
+            resp = 'mild_roll_fail'
         await ctx.send(self.format_message(msg, player, roll=roll))
 
     async def roll(self, ctx:commands.Context, type = None):
@@ -128,7 +128,8 @@ class SpiceBot(commands.Bot):
             return
         player = self.players.get(ctx.author, None)
         if not player:
-            await ctx.reply("You are not in the current game.")
+            roll = self.roll_dice()
+            await ctx.reply(self.format_message('non_partivipant_roll', ctx.author, roll=roll))
             return
         if not type:
             roll_msg = await self.send_message(ctx, 'roll_prompt', player)

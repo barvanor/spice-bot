@@ -1,4 +1,4 @@
-#+TITLE: Readme
+#+TITLE: SpiceBot
 
 A Discord bot to manage All Outta Spice games.
 
@@ -9,7 +9,7 @@ contains your bot token.
 
 #+begin_src sh
 # download and open the repo
-git clone <url>
+git clone https://github.com/Craksy/spice-bot.git
 cd spice-bot
 
 # Create a virtual environment and install dependencies
@@ -34,22 +34,26 @@ Dependencies are:
 Commands below use a forward-slash as command prefix, but this can be changed in
 the configuration.
 
-** /newgame
++ ~/newgame~~
+
 Create a new game. Display a message and wait for people to join by reacting to it.
 The member who invokes this command will be game master.
 
-** /startgame
++ ~/startgame~
+
 End the join phase and announce the turn order before starting the game. The
 turn order is randomly generated.
 
-** /roll [type]
++ ~/roll [type]~
+
 Roll a die. ~type~ can be either "mild" or "spicy". If type is not provided,
 prompt for type via reactions.
 
 The result is compared to the players current remaining ~spice~ and appropriate
 action is taken according to the rules of the game.
 
-** /stats
++ ~/stats~
+
 Display stats about the current game. This will output turn order, current turn as well as scoreboard.
 
 
@@ -76,7 +80,7 @@ The configuration variables are
 + ~reaction_timeout~
   Number of seconds to wait for a reaction. This only applies to simple yes/no
   type prompts that awaits response from a single player. The "join game"
-  reaction will never time out untill the ~/startgame~ command is used.
+  reaction will never time out until the ~/startgame~ command is used.
   A value of 0 disables timeout.
 
   Default is 0
@@ -90,9 +94,9 @@ The configuration variables are
   They are python style format strings, so placeholders can use padding and
   other formatting options.
 
-* TODO
-+ Implement logging.
+* Todo
++ Proper logging to a file.
 + Properly enforce turn order.
 + Add options to ~/newgame~ change settings per game.
 + Contain game logic from the main bot so that it can host multiple games
-  accross different channels or servers.
+  across different channels or servers.
