@@ -36,10 +36,11 @@ class SpiceBot(commands.Bot):
         self.turnorder = []
         self.turn = 0
 
-        self.add_command(commands.command()(self.newgame))
-        self.add_command(commands.command()(self.startgame))
-        self.add_command(commands.command()(self.roll))
+        self.add_command(commands.command(brief="Create a new game.")(self.newgame))
+        self.add_command(commands.command(brief="Start a game.")(self.startgame))
+        self.add_command(commands.command(brief="Roll. Can be invoked with 'spicy' or 'mild'")(self.roll))
         self.add_command(commands.command()(self.stats))
+        self.add_command(commands.command(brief="End a game in progress")(self.endgame))
 
     async def on_ready(self):
         print("Logged in as {}, ID: {}".format(self.user.name, self.user.id))
@@ -54,6 +55,7 @@ class SpiceBot(commands.Bot):
                 self.players[user] = (SpicePlayer(user=user))
 
     async def newgame(self, ctx:commands.Context):
+        """Prepare to start a new game. Wait for players to join until /startgame is invoked."""
         if not self.game_state:
             self.game_master = ctx.author
             self.game_state = GameStates.JOIN
@@ -66,6 +68,7 @@ class SpiceBot(commands.Bot):
             await self.join_message.add_reaction(emojis['hot_pepper'])
 
     async def stats(self, ctx:commands.Context):
+        """Display the scoreboard"""
         if not self.game_state == GameStates.START:
             return
         placings = sorted(self.turnorder, key=lambda p: p.spice)
@@ -78,6 +81,7 @@ class SpiceBot(commands.Bot):
         await ctx.send(stats)
 
     async def startgame(self, ctx:commands.Context):
+        """Start a game initialized, with anyone who has reacted to the join message."""
         if not self.game_state == GameStates.JOIN:
             print('game not in join phase')
             return
@@ -91,6 +95,21 @@ class SpiceBot(commands.Bot):
         msg_text = self.format_message('start_game', ctx.author,
                                        players=', '.join(p.user.name for p in self.turnorder))
         await ctx.send(msg_text)
+
+    async def endgame(self, ctx:commands.Context):
+        """End the current game"""
+        if not self.game_state in (GameStates.JOIN, GameStates.START):
+            msg_text = "Not currently in a game"
+            await ctx.send(msg_text)
+            return
+        msg_text = "Game ended"
+        await ctx.send(msg_text)
+        self.players = {}
+        self.turnorder = []
+        self.game_master = None
+        self.game_state = None
+        self.turn = 0
+
 
     def next_turn(self):
         self.turn = (self.turn+1)%len(self.turnorder)
@@ -121,9 +140,11 @@ class SpiceBot(commands.Bot):
         else:
             player.spice -= 1
             resp = 'mild_roll_fail'
-        await ctx.send(self.format_message(msg, player, roll=roll))
+        await ctx.send(self.format_message(resp, player, roll=roll))
 
     async def roll(self, ctx:commands.Context, type = None):
+        """Make a roll. [Type] can be either 'spicy' or 'mild'. If type is not
+        provided, chose type via reactions."""
         if not self.game_state == GameStates.START:
             return
         player = self.players.get(ctx.author, None)
