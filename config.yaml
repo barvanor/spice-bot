@@ -47,7 +47,7 @@ messages:
 
   # On a failed mild roll
   # Available wildcards: {name}, {mention}, {roll}, {spice}
-  mild_roll_fail: "{name}'s mild roll was failed and they lost 1:hot_pepper:
+  mild_roll_fail: "{name}'s mild roll has failed and they lost 1:hot_pepper:
   \nRemaining: {spice}:hot_pepper:"
 
   # On a successful spicy roll
